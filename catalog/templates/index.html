@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
     {% bootstrap_css %} {% bootstrap_javascript jquery='slim' %}
     <title>{% block title %} Главная {% endblock %}</title>
 </head>
@@ -13,8 +12,8 @@
     <div  style="background-color: ##FFFAF0;" class="d-flex flex-column flex-md-row p-3 px-md-4 mb-3 border-bottom box-shadow">
         <h1 class="mr-md-auto p-2">Design.pro</h1>
         <a class="p-2 text-dark" href="#">Регистрация</a>
-        <a class="p-2 text-dark" href="#">Вход</a>
-        <a class="p-2 text-dark" href="#">Выйти</a>
+        <a class="p-2 text-dark" href="{% url 'login' %}">Вход</a>
+        <a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
     </div>
     <div class="row">
         <nav class="col-md-auto nav flex-column" style="margin: 15px;">
