@@ -21,7 +21,7 @@
             <button class="dropdown-item" type="submit">Выйти</button>
         </form>
         {% else %}
-        <form class="p-2 text-dark" action="" method="post">
+        <form class="p-2 text-dark" action="{% url 'catalog:register' %}" method="post">
             {% csrf_token %}
             <button class="dropdown-item" type="submit">Регистрация</button>
         </form>
