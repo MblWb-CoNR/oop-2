@@ -11,13 +11,29 @@
 <div class="container-fluid">
     <div  style="background-color: ##FFFAF0;" class="d-flex flex-column flex-md-row p-3 px-md-4 mb-3 border-bottom box-shadow">
         <h1 class="mr-md-auto p-2">Design.pro</h1>
-        <a class="p-2 text-dark" href="#">Регистрация</a>
-        <a class="p-2 text-dark" href="{% url 'login' %}">Вход</a>
-        <a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
+        {% if user.is_authenticated %}
+        <form class="p-2 text-dark" action="{% url 'catalog:profile' %}" method="post">
+            {% csrf_token %}
+            <button class="dropdown-item" type="submit">Профиль</button>
+        </form>
+        <form class="p-2 text-dark" action="{% url 'catalog:logout'%}" method="post">
+            {% csrf_token %}
+            <button class="dropdown-item" type="submit">Выйти</button>
+        </form>
+        {% else %}
+        <form class="p-2 text-dark" action="" method="post">
+            {% csrf_token %}
+            <button class="dropdown-item" type="submit">Регистрация</button>
+        </form>
+        <form class="p-2 text-dark" action="{% url 'catalog:login' %}" method="post">
+            {% csrf_token %}
+            <button class="dropdown-item" type="submit">Вход</button>
+        </form>
+        {% endif %}
     </div>
     <div class="row">
         <nav class="col-md-auto nav flex-column" style="margin: 15px;">
-            <a style="color: black;" class="nav-link root" href="{% url 'index' %}">Главная</a>
+            <a style="color: black;" class="nav-link root" href="{% url 'catalog:index' %}">Главная</a>
         </nav>
         <div class="container"> {% bootstrap_messages %} {% block content %} {% endblock %}</div>
     </div>
