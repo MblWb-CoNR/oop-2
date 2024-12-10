@@ -53,7 +53,16 @@ class RegisterUserForm(forms.ModelForm):
                 message='Логин должен состоять только из латинских букв и дефисов.'
             )
         ])
+
+    # company_tarif = forms.BooleanField(label='Тариф для юридических лиц')
+    #
+    # individual_tarif = forms.BooleanField(label='Тариф для физических лиц')
+
+
     consent = forms.BooleanField(label='Согласие на обработку персональных данных')
+
+    tarif = forms.ChoiceField(label='Тариф', choices=((1, "Выберите тариф"),(2, "Тариф для юридических лиц"), (3, "Тариф для физических лиц")))
+
 
     def clean_password1(self):
         password1 = self.cleaned_data.get('password1')
@@ -75,12 +84,11 @@ class RegisterUserForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password1'])
-        user.is_active = True
-        user.is_activated = True
         if commit:
             user.save()
         return user
 
     class Meta:
         model = AdvUser
-        fields = ('username', 'first_name', 'patronymic', 'last_name', 'email', 'password1', 'password2', 'consent')
+        fields = ('username', 'first_name', 'patronymic', 'last_name', 'email', 'password1',
+                  'password2', 'tarif', 'consent')
