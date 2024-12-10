@@ -5,7 +5,7 @@
 <h2>Регистрация нового пользователя</h2>
 <form method="post">
     {% csrf_token %}
-    {% bootstrap_form form layout='horizontal' %}
+    {{ form.as_p }}
     {% buttons submit='Зарегистрироваться' %} {% endbuttons %}
 </form>
 {% endblock %}

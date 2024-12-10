@@ -3,6 +3,7 @@ from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from .models import AdvUser
 from django.core.validators import RegexValidator
+from .models import Tarif
 
 
 class ChangeUserInfoForm(forms.ModelForm):
@@ -53,15 +54,10 @@ class RegisterUserForm(forms.ModelForm):
                 message='Логин должен состоять только из латинских букв и дефисов.'
             )
         ])
-
-    # company_tarif = forms.BooleanField(label='Тариф для юридических лиц')
-    #
-    # individual_tarif = forms.BooleanField(label='Тариф для физических лиц')
-
-
     consent = forms.BooleanField(label='Согласие на обработку персональных данных')
 
-    tarif = forms.ChoiceField(label='Тариф', choices=((1, "Выберите тариф"),(2, "Тариф для юридических лиц"), (3, "Тариф для физических лиц")))
+    tarif = forms.ModelChoiceField(queryset=Tarif.objects.all(), empty_label="Выберите тариф", label='Тариф')
+
 
 
     def clean_password1(self):

@@ -9,3 +9,10 @@ class AdvUser(AbstractUser):
 
    class Meta(AbstractUser.Meta):
        pass
+
+
+class Tarif(models.Model):
+    name = models.CharField(max_length=100, blank=True, verbose_name='Тариф')
+
+    def __str__(self):
+        return self.name
