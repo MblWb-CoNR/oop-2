@@ -7,4 +7,8 @@
     {% else %}
     <p>Здравствуйте! </p>
     {% endif %}
+    <form class="p-2 text-dark" action="{% url 'catalog:create_application' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Создать новую заявку</button>
+    </form>
  {% endblock %}

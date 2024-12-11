@@ -10,6 +10,7 @@ from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.core.mail import send_mail
 from django.contrib.auth import login
+from .forms import ApplicationForm
 
 
 def index(request):
@@ -55,8 +56,19 @@ class RegisterUserView(CreateView):
         return response
 
 
-
 class RegisterDoneView(TemplateView):
     template_name = 'registration/register_done.html'
+
+
+def create_application(request):
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ApplicationForm()
+
+    return render(request, 'application/create_application.html', {'form': form})
 
 

@@ -19,10 +19,10 @@ class Categories(models.Model):
 
 
 class Application(models.Model):
-    name = models.CharField(max_length=100, blank=True, verbose_name='Название')
+    name = models.CharField(max_length=100, verbose_name='Название')
     description = models.TextField(max_length=1000, help_text="Описание")
     categories = models.ManyToManyField(Categories, help_text="Выберите категорию")
-    photo = models.FileField(upload_to ='uploads/')
+    photo = models.FileField(upload_to='photos/')
 
     LOAN_STATUS = (
         ('n', 'Новая'),

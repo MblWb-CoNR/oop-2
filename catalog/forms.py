@@ -6,14 +6,6 @@ from .models import Application
 from django.core.validators import RegexValidator
 
 
-class ChangeUserInfoForm(forms.ModelForm):
-   email = forms.EmailField(required=True, label='Адрес электронной почты')
-
-   class Meta:
-       model = AdvUser
-       fields = ('username', 'email', 'first_name', 'patronymic', 'last_name')
-
-
 class RegisterUserForm(forms.ModelForm):
     email = forms.EmailField(required=True, label='Адрес электронной почты', validators=[
             RegexValidator(
@@ -62,8 +54,6 @@ class RegisterUserForm(forms.ModelForm):
     ]
     tariff = forms.ChoiceField(choices=TARIFF_CHOICES, label='Тариф')
 
-
-
     def clean_password1(self):
         password1 = self.cleaned_data.get('password1')
         if password1:
@@ -80,7 +70,6 @@ class RegisterUserForm(forms.ModelForm):
                 'Введенные пароли не совпадают.'
             ))
 
-
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password1'])
@@ -93,18 +82,14 @@ class RegisterUserForm(forms.ModelForm):
         fields = ('username', 'first_name', 'patronymic', 'last_name', 'email', 'password1',
                   'password2', 'tariff', 'consent')
 
-class ApplicationForms(forms.ModelForm):
-    name = forms.CharField(required=True, label='Название')
-    description = forms.TextField(label='Описание', max_length=1000)
-    LOAN_STATUS = (
-        ('n', 'Новая'),
-        ('o', 'Принята в работу'),
-        ('d', 'Выполнена'),
 
-    )
-    categories = forms.ChoiceField(label='Категория', max_length=100, choices=LOAN_STATUS)
-    photo = forms.FileField(label='Фото')
-
+class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Application
         fields = ('name', 'description', 'categories', 'photo')
+
+    def clean_photo(self):
+        photo = self.cleaned_data.get('photo')
+        if photo.size > 2 * 1024 * 1024:
+            raise forms.ValidationError("Размер фото не должен превышать 2 Мб.")
+        return photo
