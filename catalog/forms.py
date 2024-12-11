@@ -3,7 +3,8 @@ from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from .models import AdvUser
 from django.core.validators import RegexValidator
-from .models import Tarif
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 class ChangeUserInfoForm(forms.ModelForm):
@@ -56,7 +57,11 @@ class RegisterUserForm(forms.ModelForm):
         ])
     consent = forms.BooleanField(label='Согласие на обработку персональных данных')
 
-    tarif = forms.ModelChoiceField(queryset=Tarif.objects.all(), empty_label="Выберите тариф", label='Тариф')
+    TARIFF_CHOICES = [
+        ('company', 'Для юр.лиц'),
+        ('individual', 'Для физ.лиц'),
+    ]
+    tariff = forms.ChoiceField(choices=TARIFF_CHOICES, label='Тариф')
 
 
 
@@ -87,4 +92,4 @@ class RegisterUserForm(forms.ModelForm):
     class Meta:
         model = AdvUser
         fields = ('username', 'first_name', 'patronymic', 'last_name', 'email', 'password1',
-                  'password2', 'tarif', 'consent')
+                  'password2', 'tariff', 'consent')

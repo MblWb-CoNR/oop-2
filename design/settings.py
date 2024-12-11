@@ -39,6 +39,7 @@ EMAIL_HOST_USER = 'malenkoer@mail.ru'
 EMAIL_HOST_PASSWORD = 'zFZNRLhwpDGbchWqY6BH'
 DEFAULT_FROM_EMAIL = 'malenkoer@mail.ru'
 
+
 ROOT_URLCONF = 'design.urls'
 
 TEMPLATES = [
