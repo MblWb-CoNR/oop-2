@@ -2,9 +2,8 @@ from django import forms
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from .models import AdvUser
+from .models import Application
 from django.core.validators import RegexValidator
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 
 
 class ChangeUserInfoForm(forms.ModelForm):
@@ -93,3 +92,19 @@ class RegisterUserForm(forms.ModelForm):
         model = AdvUser
         fields = ('username', 'first_name', 'patronymic', 'last_name', 'email', 'password1',
                   'password2', 'tariff', 'consent')
+
+class ApplicationForms(forms.ModelForm):
+    name = forms.CharField(required=True, label='Название')
+    description = forms.TextField(label='Описание', max_length=1000)
+    LOAN_STATUS = (
+        ('n', 'Новая'),
+        ('o', 'Принята в работу'),
+        ('d', 'Выполнена'),
+
+    )
+    categories = forms.ChoiceField(label='Категория', max_length=100, choices=LOAN_STATUS)
+    photo = forms.FileField(label='Фото')
+
+    class Meta:
+        model = Application
+        fields = ('name', 'description', 'categories', 'photo')
