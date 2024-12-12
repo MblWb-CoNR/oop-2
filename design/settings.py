@@ -1,7 +1,7 @@
+import os.path
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 SECRET_KEY = 'django-insecure-9j0%4tka+6ee*fh@*yb@x7m)18336^qn-tzihd(r6mxiq5*yz7'
 
@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'catalog.apps.CatalogConfig',
     'bootstrap4',
+
 ]
 
 MIDDLEWARE = [
@@ -39,6 +40,9 @@ EMAIL_HOST_USER = 'malenkoer@mail.ru'
 EMAIL_HOST_PASSWORD = 'zFZNRLhwpDGbchWqY6BH'
 DEFAULT_FROM_EMAIL = 'malenkoer@mail.ru'
 
+MEDIA_URL = 'media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 ROOT_URLCONF = 'design.urls'
 

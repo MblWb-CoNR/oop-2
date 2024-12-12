@@ -6,6 +6,8 @@ from .views import BBLogoutView
 from .views import RegisterDoneView
 from .views import RegisterUserView
 from .views import create_application
+from .views import delete_application
+
 
 
 app_name = 'catalog'
@@ -18,5 +20,6 @@ urlpatterns = [
     path('accounts/register/done/', RegisterDoneView.as_view(), name='register_done'),
     path('accounts/register/', RegisterUserView.as_view(), name='register'),
     path('create/', create_application, name='create_application'),
+    path('delete/<int:application_id>/', delete_application, name='delete_application'),
 ]
 

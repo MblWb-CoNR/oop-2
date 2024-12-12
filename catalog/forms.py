@@ -3,6 +3,7 @@ from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from .models import AdvUser
 from .models import Application
+from .models import Categories
 from django.core.validators import RegexValidator
 
 
@@ -84,6 +85,9 @@ class RegisterUserForm(forms.ModelForm):
 
 
 class ApplicationForm(forms.ModelForm):
+    categories = forms.ModelMultipleChoiceField(
+        queryset=Categories.objects.all(),
+    )
     class Meta:
         model = Application
         fields = ('name', 'description', 'categories', 'photo')
@@ -92,4 +96,6 @@ class ApplicationForm(forms.ModelForm):
         photo = self.cleaned_data.get('photo')
         if photo.size > 2 * 1024 * 1024:
             raise forms.ValidationError("Размер фото не должен превышать 2 Мб.")
+        if photo.image.format.lower() not in ['jpeg', 'jpg', 'png', 'bmp']:
+            raise forms.ValidationError("Формат фото должно быть jpeg, jpg, png, bmp")
         return photo
