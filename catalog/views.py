@@ -38,24 +38,23 @@ class RegisterUserView(CreateView):
     form_class = RegisterUserForm
     success_url = reverse_lazy('catalog:register_done')
 
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        user = self.object
-        tariff = form.cleaned_data.get('tariff')
-
-        subject = 'Регистрация на сайте'
-        message = f'Спасибо за регистрацию! Вы выбрали тариф: {dict(form.TARIFF_CHOICES)[tariff]}'
-        from_email = 'malenkoer@mail.ru'
-        recipient_list = [user.email]
-        send_mail(subject, message, from_email, recipient_list)
-
-        try:
-            send_mail(subject, message, from_email, recipient_list)
-        except Exception as e:
-            print(f'Email sending failed: {e}')
-
-        login(self.request, user)
-        return response
+    # def form_valid(self, form):
+    #     response = super().form_valid(form)
+    #     user = self.object
+    #
+    #     subject = 'Регистрация на сайте'
+    #     message = f'Спасибо за регистрацию! Вы выбрали тариф: {dict(form.TARIFF_CHOICES)[tariff]}'
+    #     from_email = 'malenkoer@mail.ru'
+    #     recipient_list = [user.email]
+    #     send_mail(subject, message, from_email, recipient_list)
+    #
+    #     try:
+    #         send_mail(subject, message, from_email, recipient_list)
+    #     except Exception as e:
+    #         print(f'Email sending failed: {e}')
+    #
+    #     login(self.request, user)
+    #     return response
 
 
 class RegisterDoneView(TemplateView):
@@ -65,15 +64,12 @@ class RegisterDoneView(TemplateView):
 @login_required
 def create_application(request):
     if request.method == 'POST':
-        form = ApplicationForm(request.POST, request.FILES)
+        form = ApplicationForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
-            application = form.save(commit=False)
-            application.user = request.user
-            application.save()
-            form.save_m2m()
+            application = form.save()
             return redirect('catalog:profile')
     else:
-        form = ApplicationForm()
+        form = ApplicationForm(user=request.user)
     return render(request, 'application/create_application.html', {'form': form})
 
 @login_required

@@ -8,6 +8,11 @@ class AdvUser(AbstractUser):
    patronymic = models.CharField(max_length=100, blank=True, verbose_name='Отчество')
    last_name = models.CharField(max_length=100, blank=True, verbose_name='Фамилия')
 
+   TARIFF_CHOICES = [
+       ('company', 'Для юр.лиц'),
+       ('individual', 'Для физ.лиц'),
+   ]
+   tariff = models.CharField(max_length=20, choices=TARIFF_CHOICES, default='individual', verbose_name='Тариф')
    class Meta(AbstractUser.Meta):
        pass
 
@@ -34,5 +39,4 @@ class Application(models.Model):
 
     status = models.CharField(max_length=1, choices=LOAN_STATUS, blank=True, default='n', help_text='Статус заявки')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, verbose_name='Пользователь')
-
-
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена', default=10000, blank=True)

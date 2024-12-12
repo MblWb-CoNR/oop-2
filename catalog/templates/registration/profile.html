@@ -43,6 +43,7 @@
                     <p class="card-text">{{ application.description }}</p>
                     <p class="card-text">Статус: {{ application.get_status_display }}</p>
                     <p class="card-text">Категории: {{ application.categories.all|join:', ' }}</p>
+                    <p class="card-text">Цена: {{ application.price}}</p>
                 </div>
                 <div class="card-footer text-center">
                     <a href="{% url 'catalog:delete_application' application.id %}">Удалить</a>

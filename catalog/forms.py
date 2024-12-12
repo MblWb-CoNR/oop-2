@@ -14,7 +14,6 @@ class RegisterUserForm(forms.ModelForm):
                 message=' Необходим валидный формат email-адреса'
             )
         ])
-
     password1 = forms.CharField(
         label='Пароль',
         widget=forms.PasswordInput,
@@ -48,12 +47,6 @@ class RegisterUserForm(forms.ModelForm):
             )
         ])
     consent = forms.BooleanField(label='Согласие на обработку персональных данных')
-
-    TARIFF_CHOICES = [
-        ('company', 'Для юр.лиц'),
-        ('individual', 'Для физ.лиц'),
-    ]
-    tariff = forms.ChoiceField(choices=TARIFF_CHOICES, label='Тариф')
 
     def clean_password1(self):
         password1 = self.cleaned_data.get('password1')
@@ -90,12 +83,33 @@ class ApplicationForm(forms.ModelForm):
     )
     class Meta:
         model = Application
-        fields = ('name', 'description', 'categories', 'photo')
+        fields = ('name', 'description', 'categories', 'photo', 'price')
 
     def clean_photo(self):
         photo = self.cleaned_data.get('photo')
         if photo.size > 2 * 1024 * 1024:
             raise forms.ValidationError("Размер фото не должен превышать 2 Мб.")
-        if photo.image.format.lower() not in ['jpeg', 'jpg', 'png', 'bmp']:
-            raise forms.ValidationError("Формат фото должно быть jpeg, jpg, png, bmp")
         return photo
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        application = super().save(commit=False)
+        application.user = self.user
+
+        if self.user.tariff == 'company':
+            multiplier = 1.20
+        elif self.user.tariff == 'individual':
+            multiplier = 1.06
+        else:
+            multiplier = 1.00
+
+        base_price = 10000
+        application.price = base_price * multiplier
+
+        if commit:
+            application.save()
+            self.save_m2m()
+        return application
