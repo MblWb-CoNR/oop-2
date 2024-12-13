@@ -25,6 +25,7 @@ class Categories(models.Model):
 
 
 class Application(models.Model):
+    date = models.DateField(null=True, blank=True)
     name = models.CharField(max_length=100, verbose_name='Название')
     description = models.TextField(max_length=1000, help_text="Описание")
     categories = models.ManyToManyField(Categories, help_text="Выберите категорию")

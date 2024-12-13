@@ -15,7 +15,12 @@ from .models import Application
 
 
 def index(request):
-    return render(request, 'index.html')
+    num_application_in_work = Application.objects.filter(status__exact='o').count()
+    applications = Application.objects.all()
+    return render(
+        request,
+        'index.html',
+        context={'num_application_in_work': num_application_in_work, 'applications': applications})
 
 
 class BBLoginView(LoginView):

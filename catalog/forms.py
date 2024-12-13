@@ -83,7 +83,7 @@ class ApplicationForm(forms.ModelForm):
     )
     class Meta:
         model = Application
-        fields = ('name', 'description', 'categories', 'photo', 'price')
+        fields = ('date', 'name', 'description', 'categories', 'photo', 'price')
 
     def clean_photo(self):
         photo = self.cleaned_data.get('photo')
