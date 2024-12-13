@@ -35,9 +35,9 @@ class Application(models.Model):
         ('n', 'Новая'),
         ('o', 'Принята в работу'),
         ('d', 'Выполнена'),
-
     )
 
     status = models.CharField(max_length=1, choices=LOAN_STATUS, blank=True, default='n', help_text='Статус заявки')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, verbose_name='Пользователь')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена', default=10000, blank=True)
+    comment = models.TextField(null=True, blank=True, verbose_name='Комментарий администратора')

@@ -35,8 +35,6 @@
             <div class="card">
                 {% if application.photo %}
                 <img src="{{ application.photo.url }}" class="card-img-top app-img" alt="Фото заявки">
-                {% else %}
-                <img src="path_to_default_image" class="card-img-top app-img" alt="Фото заявки">
                 {% endif %}
                 <div class="card-body">
                     <p class="card-text">{{ application.date }}</p>

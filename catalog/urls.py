@@ -21,5 +21,8 @@ urlpatterns = [
     path('accounts/register/', RegisterUserView.as_view(), name='register'),
     path('create/', create_application, name='create_application'),
     path('delete/<int:application_id>/', delete_application, name='delete_application'),
+    path('admin_profile/', views.admin_profile, name='admin_profile'),
+    path('create_application/', views.create_application, name='create_application'),
+    path('edit_application/<int:application_id>/', views.edit_application, name='edit_application'),
 ]
 

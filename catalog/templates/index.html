@@ -15,7 +15,7 @@
     }
 </style>
 <div class="container-fluid">
-    <div  style="background-color: ##FFFAF0;" class="d-flex flex-column flex-md-row p-3 px-md-4 mb-3 border-bottom box-shadow">
+    <div style="background-color: #FFFAF0;" class="d-flex flex-column flex-md-row p-3 px-md-4 mb-3 border-bottom box-shadow">
         <h1 class="mr-md-auto p-2">Design.pro</h1>
         {% if user.is_authenticated %}
         <form class="p-2 text-dark" action="{% url 'catalog:profile' %}" method="post">
@@ -40,10 +40,13 @@
     <div class="row">
         <nav class="col-md-auto nav flex-column" style="margin: 15px;">
             <a style="color: black;" class="nav-link root" href="{% url 'catalog:index' %}">Главная</a>
+                {% if user.is_staff %}
+                    <a style="color: black;" class="nav-link root" href="{% url 'catalog:admin_profile' %}">Профиль администратора</a>
+                {% endif %}
         </nav>
         <div class="container"> {% bootstrap_messages %}
             {% block content %}
-                <p class="p-2 text-dark">Заявок принятых в работу: {{num_application_in_work}}</p>
+                <p class="p-2 text-dark">Заявок принятых в работу: {{ num_application_in_work }}</p>
                 <h3 class="p-2 text-dark">Последние заявки</h3>
             {% if applications %}
         <div class="row">
@@ -52,8 +55,6 @@
                 <div class="card">
                     {% if application.photo %}
                     <img src="{{ application.photo.url }}" class="card-img-top app-img" alt="Фото заявки">
-                    {% else %}
-                    <img src="path_to_default_image" class="card-img-top app-img" alt="Фото заявки">
                     {% endif %}
                     <div class="card-body">
                         <p class="card-text">{{ application.date }}</p>
@@ -61,7 +62,7 @@
                         <p class="card-text">{{ application.description }}</p>
                         <p class="card-text">Статус: {{ application.get_status_display }}</p>
                         <p class="card-text">Категории: {{ application.categories.all|join:', ' }}</p>
-                        <p class="card-text">Цена: {{ application.price}}</p>
+                        <p class="card-text">Цена: {{ application.price }}</p>
                     </div>
                 </div>
             </div>

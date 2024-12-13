@@ -113,3 +113,8 @@ class ApplicationForm(forms.ModelForm):
             application.save()
             self.save_m2m()
         return application
+
+class ApplicationAdminForm(forms.ModelForm):
+    class Meta:
+        model = Application
+        fields = ('status', 'categories', 'photo', 'comment')
