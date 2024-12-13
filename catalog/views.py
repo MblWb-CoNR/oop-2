@@ -89,7 +89,7 @@ def delete_application(request, application_id):
         messages.error(request, "У вас нет прав на удаление этой заявки.")
         return redirect('catalog:profile')
 
-    if application.status != 'n':  # 'n' - статус "Новая"
+    if application.status != 'n':
         messages.error(request, "Заявку нельзя удалить, так как её статус изменён.")
         return redirect('catalog:profile')
 
@@ -104,19 +104,32 @@ def delete_application(request, application_id):
 @user_passes_test(lambda u: u.is_staff)
 def edit_application(request, application_id):
     application = get_object_or_404(Application, id=application_id)
+    user = application.user
     if request.method == 'POST':
         form = ApplicationAdminForm(request.POST, request.FILES, instance=application)
         if form.is_valid():
             application = form.save(commit=False)
-            if application.status == 'd' and not application.photo:
-                form.add_error('photo', 'Необходимо загрузить фотографию для заявки со статусом "Выполнена"')
-            elif application.status == 'o' and not application.comment:
-                form.add_error('comment', 'Необходимо добавить комментарий для заявки со статусом "Принята в работу"')
-            else:
-                application.save()
-                return redirect('catalog:profile')
+
+            # if application.status == 'd' and not application.photo:
+            #     form.add_error('photo', 'Необходимо загрузить фотографию для заявки со статусом "Выполнена"')
+            # elif application.status == 'o' and not application.comment:
+            #     form.add_error('comment', 'Необходимо добавить комментарий для заявки со статусом "Принята в работу"')
+            # else:
+            #     application.save()
+            #     return redirect('catalog:profile')
+
+            if application.status == 'd' and not application.document:
+                messages.error(request, 'Загрузите договор!')
+                return render(request, 'application/edit_application.html', {'form': form, 'application': application})
+            if application.document and user.tariff != 'company':
+                messages.error(request, 'Только для юр.лиц!')
+                return render(request, 'application/edit_application.html', {'form': form, 'application': application})
+
+            application.save()
+            return redirect('catalog:admin_profile')
     else:
         form = ApplicationAdminForm(instance=application)
+
     return render(request, 'application/edit_application.html', {'form': form, 'application': application})
 
 

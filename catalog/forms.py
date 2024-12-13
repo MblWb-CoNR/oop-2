@@ -81,6 +81,7 @@ class ApplicationForm(forms.ModelForm):
     categories = forms.ModelMultipleChoiceField(
         queryset=Categories.objects.all(),
     )
+
     class Meta:
         model = Application
         fields = ('date', 'name', 'description', 'categories', 'photo', 'price')
@@ -114,7 +115,31 @@ class ApplicationForm(forms.ModelForm):
             self.save_m2m()
         return application
 
+
+def valid_document(value):
+    allowed_formats = ['doc', 'docx', 'odt']
+    ext = value.name.split('.')[-1].lower()
+    if ext not in allowed_formats:
+        raise ValidationError('Недопустимый формат файла. Разрешены только файлы формата doc, docx или odt.')
+
+
 class ApplicationAdminForm(forms.ModelForm):
+    document = forms.FileField(validators=[valid_document], required=False)
+
     class Meta:
         model = Application
-        fields = ('status', 'categories', 'photo', 'comment')
+        fields = ('status', 'categories', 'photo', 'comment', 'document')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        status = cleaned_data.get('status')
+        document = cleaned_data.get('document')
+        user = self.instance.user
+
+        if status == 'd' and not document:
+            self.add_error('document', 'Для измененияч статуса прикрепите докумет!')
+
+        if document and user.tariff != 'company':
+            self.add_error('document', 'Только для юр.лиц!')
+
+        return cleaned_data

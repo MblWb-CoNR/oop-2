@@ -13,6 +13,7 @@ class AdvUser(AbstractUser):
        ('individual', 'Для физ.лиц'),
    ]
    tariff = models.CharField(max_length=20, choices=TARIFF_CHOICES, default='individual', verbose_name='Тариф')
+
    class Meta(AbstractUser.Meta):
        pass
 
@@ -41,3 +42,4 @@ class Application(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, verbose_name='Пользователь')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена', default=10000, blank=True)
     comment = models.TextField(null=True, blank=True, verbose_name='Комментарий администратора')
+    document = models.FileField(upload_to='documents/', null=True, blank=True, verbose_name='Договор')
